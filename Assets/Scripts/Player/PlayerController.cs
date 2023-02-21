@@ -21,6 +21,51 @@ public class PlayerController : MonoBehaviour
     public LayerMask isGroundLayer;
     public float groundCheckRadius;
 
+
+    Coroutine jumpForceChange;
+
+
+    public int maxLives = 5;
+    private int _lives = 3;
+
+    public int maxScore = 10;
+    private int _score = 0;
+
+    public int lives
+    {
+        get { return _lives; }
+        set
+        {
+            _lives = value;
+
+            if (_lives > maxLives)
+            {
+                _lives = maxLives;
+            }
+
+            Debug.Log("Lives have been set to: " + _lives.ToString());
+        }
+
+    }
+
+    public int score
+    {
+        get { return _score; }
+        set
+        {
+            _score = value;
+            if (_score > maxScore)
+            {
+                _score = maxScore;
+            }
+
+            Debug.Log("Score is now: " + _score.ToString());
+        }
+    }
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +81,7 @@ public class PlayerController : MonoBehaviour
 
         if (jumpForce <= 0)
         {
-            jumpForce = 300;
+            jumpForce = 350;
             Debug.Log("Jump force was set incorrect, defaulting to " + jumpForce.ToString());
         }
 
@@ -85,10 +130,15 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector2.up * jumpForce);
         }
         
+        if (isGrounded && Input.GetButton("Vertical"))
+        {
+            anim.SetTrigger("Climbing");
+        }
         
-
+        
         anim.SetFloat("hinput", Mathf.Abs(hInput));
         anim.SetBool("IsGrounded", isGrounded);
+        
         
         //check for flipped and create an algorithm to flip your character
         
@@ -96,6 +146,38 @@ public class PlayerController : MonoBehaviour
         {
             sr.flipX = (hInput > 0);
         }
+
+    }
+
+    public void IncreaseGravity()
+    {
+        rb.gravityScale = 5;
+    }
+
+    public void StartJumpForceChange()
+    {
+        if (jumpForceChange == null)
+        {
+            jumpForceChange = StartCoroutine(JumpForceChange());
+        }
+        else
+        {
+            StopCoroutine(jumpForceChange);
+            jumpForceChange = null;
+            jumpForce /= 2;
+            jumpForceChange = StartCoroutine(JumpForceChange());
+        }
+    }
+
+    IEnumerator JumpForceChange()
+    {
+        jumpForce *= 2;
+
+        
+        yield return new WaitForSeconds(5.0f);
+
+        jumpForce /= 2;
+        jumpForceChange = null;
 
     }
 }

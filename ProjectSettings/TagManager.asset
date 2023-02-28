@@ -9,6 +9,10 @@ TagManager:
   - Wall
   - Ladder
   - OneWayPlatform
+  - Barrier
+  - Enemy
+  - PlayerProjectile
+  - EnemyProjectile
   layers:
   - Default
   - TransparentFX

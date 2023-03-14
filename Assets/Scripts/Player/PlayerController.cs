@@ -24,12 +24,11 @@ public class PlayerController : MonoBehaviour
 
     Coroutine jumpForceChange;
 
+    public int maxScore = 10;
+    private int _score = 0;
 
     public int maxLives = 5;
     private int _lives = 3;
-
-    public int maxScore = 10;
-    private int _score = 0;
 
     public int lives
     {

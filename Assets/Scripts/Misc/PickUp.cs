@@ -13,6 +13,7 @@ public class PickUp : MonoBehaviour
     }
 
     public PickupType currentPickup;
+    public AudioClip PickupSound;
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -33,6 +34,11 @@ public class PickUp : MonoBehaviour
                     
                     break;
 
+            }
+
+            if (PickupSound)
+            {
+                collision.gameObject.GetComponent<AudioSourceManager>().PlayOneShot(PickupSound, false);
             }
 
             Destroy(gameObject);

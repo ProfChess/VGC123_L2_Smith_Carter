@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class UIManager : MonoBehaviour
 {
+
+    public AudioMixer audioMixer;
 
     [Header("Button")]
     public Button startButton;
@@ -22,8 +25,11 @@ public class UIManager : MonoBehaviour
     [Header("Text")]
     public Text volSliderText;
     public Text livesText;
+
     [Header("Slider")]
     public Slider volSlider;
+
+    public AudioClip pauseSound;
 
     void StartGame()
     {
@@ -37,7 +43,10 @@ public class UIManager : MonoBehaviour
 
         if (volSlider && volSliderText)
         {
-            volSliderText.text = volSlider.value.ToString();
+            float value;
+            audioMixer.GetFloat("MasterVol", out value);
+            volSlider.value = value + 80;
+            volSliderText.text = Mathf.Floor((value+80)).ToString();
         }
     }
 
@@ -69,6 +78,7 @@ public class UIManager : MonoBehaviour
         if (volSliderText)
         {
             volSliderText.text = value.ToString();
+            audioMixer.SetFloat("MasterVol", value - 80);
         }
     }
 
@@ -139,6 +149,8 @@ public class UIManager : MonoBehaviour
             if (pauseMenu.activeSelf)
             {
                 Time.timeScale = 0;
+                GameManager.Instance.playerInstance.GetComponent<AudioSourceManager>().PlayOneShot
+                    (pauseSound, false);
             }
             else
             {

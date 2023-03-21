@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [RequireComponent(typeof(Shoot))]
 public class EnemyTurret : Enemy
@@ -9,8 +10,11 @@ public class EnemyTurret : Enemy
     float timeSinceLastFire;
     Shoot shootScript;
     float distance;
-
     
+    
+    
+
+
 
     // Update is called once per frame
     void Update()
@@ -30,6 +34,8 @@ public class EnemyTurret : Enemy
 
     public override void Start()
     {
+        
+
         base.Start();
 
         shootScript = GetComponent<Shoot>();
@@ -38,6 +44,7 @@ public class EnemyTurret : Enemy
 
     public override void Death()
     {
+        
         Destroy(gameObject);
     }
 

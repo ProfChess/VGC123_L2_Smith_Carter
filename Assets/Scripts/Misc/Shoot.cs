@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class Shoot : MonoBehaviour
 {
     SpriteRenderer sr;
+    AudioSourceManager asm;
 
     public UnityEvent OnProjectileSpawned;
     public float projectileSpeed;
@@ -14,10 +15,14 @@ public class Shoot : MonoBehaviour
     public Transform spawnPointLeft;
 
     public Projectile projectilePrefab;
+
+    public AudioClip fireSound;
+
     // Start is called before the first frame update
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
+        asm = GetComponent<AudioSourceManager>();
 
         if (projectileSpeed <= 0 )
         {
@@ -41,6 +46,11 @@ public class Shoot : MonoBehaviour
         {
             Projectile curProjectile = Instantiate(projectilePrefab, spawnPointLeft.position, spawnPointRight.rotation);
             curProjectile.speed = -projectileSpeed;
+        }
+
+        if (asm)
+        {
+            asm.PlayOneShot(fireSound, false);
         }
 
         OnProjectileSpawned?.Invoke();
